@@ -1,0 +1,89 @@
+<?php
+
+/**
+ * Implements hook_entity_info().
+ */
+function libhours_entity_info() {
+  $info = array();
+  $info['libhours_period'] = array(
+    'label' => t('Period'),
+    'fieldable' => FALSE,
+    'entity class' => 'Entity',
+    'controller class' => 'LibhoursPeriodController',
+    'base table' => 'libhours_period',
+    'entity keys' => array(
+      'id' => 'period_id',
+    ),
+  );
+
+  $info['libhours_schedule'] = array(
+    'label' => t('Schedule'),
+    'fieldable' => FALSE,
+    'entity class' => 'Entity',
+    'controller class' => 'EntityAPIController',
+    'base table' => 'libhours_schedule',
+    'entity keys' => array(
+      'id' => 'schedule_id',
+    ),
+  );
+
+  $info['libhours_location_schedule'] = array(
+    'label' => t('LocationSchedule'),
+    'fieldable' => FALSE,
+    'entity class' => 'Entity',
+    'controller class' => 'EntityAPIController',
+    'base table' => 'libhours_location_schedule',
+    // TODO: Handle multiple entity keys?  Or create a surrogate primary key?
+    'entity keys' => array(
+      'id' => 'schedule_id',
+    ),
+  );
+
+  $info['libhours_shift'] = array(
+    'label' => t('Shift'),
+    'fieldable' => FALSE,
+    'entity class' => 'Entity',
+    'controller class' => 'EntityAPIController',
+    'base table' => 'libhours_shift',
+    'entity keys' => array(
+      'id' => 'shift_id',
+    ),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function libhours_menu() {
+  $items = array();
+  $items['period/%'] = array(
+    'title' => 'Periods',
+    'page callback' => '_libhours_view_period',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * Callback function for displaying a Period
+ */
+function _libhours_view_period($id) {
+  // entity_load returns array
+  $periods = entity_load('libhours_period', array($id));
+  $period = $periods[$id];
+  drupal_set_title($period->period_name);
+
+  return entity_view('libhours_period', array($period));
+}
+
+/**
+ * Convenience function for saving a Period.
+ */
+function _libhours_save_period($period) {
+  entity_save('libhours_period', $period);
+}
+

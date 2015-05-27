@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Implements hook_enable().
+ */
+function libhours_demo_enable() {
+  $period = entity_create('libhours_period', array());
+  $period->period_name = 'TEST PERIOD NAME';
+  $period->start_date = time();
+  $period->end_date = time() + (7*24*60*60);
+  //$entity->save();
+  _libhours_save_period($period);
+}
+
