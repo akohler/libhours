@@ -79,10 +79,40 @@ function libhours_schema() {
 }
 
 /**
+ * Implements hook_install().
+ * Adds fields, associates fields with entities.
+ */
+function libhours_install() {
+  // Create entityreference field for Schedules, referring to Periods.
+  $field = array(
+    'field_name' => 'libhours_period_reference',
+    'type' => 'entityreference',
+    'settings' => array(
+      'target_type' => 'libhours_period',
+    ),
+    'cardinality' => 1,
+  );
+  field_create_field($field);
+
+  // Create instance of libhours_period_reference attached to Schedule entity.
+  $instance = array(
+    'field_name' => 'libhours_period_reference',
+    'entity_type' => 'libhours_schedule',
+    'bundle' => 'schedule_bundle',
+    'required' => TRUE,
+    'widget' => array(
+      'type' => 'options_select',
+    ),
+  );
+  field_create_instance($instance);
+}
+ 
+/**
  * Implements hook_uninstall().
  * Remove libhours database tables.
  */
 function libhours_uninstall() {
+  field_delete_field('libhours_period_reference');
   db_drop_table('libhours_schedule');
   db_drop_table('libhours_period');
 }

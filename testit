@@ -8,6 +8,7 @@ fi
 case $1 in
   on)
     drush @bs en -y libhours_demo
+    drush @bs sqlq "show tables like '%libhours%'"
     drush @bs sqlq "select * from libhours_period"
     drush @bs sqlq "select * from libhours_schedule"
     ;;
@@ -15,6 +16,7 @@ case $1 in
     drush @bs dis -y libhours_demo libhours
     drush @bs pmu -y libhours_demo
     drush @bs pmu -y libhours
+    drush @bs sqlq "show tables like '%libhours%'"
     ;;
 esac
 

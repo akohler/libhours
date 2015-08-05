@@ -18,12 +18,17 @@ function libhours_entity_info() {
 
   $info['libhours_schedule'] = array(
     'label' => t('Schedule'),
-    'fieldable' => FALSE,
+    'fieldable' => TRUE,
     'entity class' => 'Entity',
     'controller class' => 'EntityAPIController',
     'base table' => 'libhours_schedule',
     'entity keys' => array(
       'id' => 'schedule_id',
+    ),
+    'bundles' => array(
+      'schedule_bundle' => array(
+        'label' => 'Schedule',
+      ),
     ),
   );
 
