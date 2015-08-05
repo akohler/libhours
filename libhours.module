@@ -36,6 +36,23 @@ function libhours_entity_info() {
 }
 
 /**
+ * Implements hook_field_info().
+ */
+function libhours_field_info() {
+  return array(
+    'libhours_shift' => array(
+      'label' => t('Shift'),
+      'description' => t("This field stores Shifts."),
+      'settings' => array('allowed_values' => array(), 'allowed_values_function' => ''),
+      'default_widget' => 'libhours_shift',
+      'default_formatter' => 'libhours_shift',
+      'property_type' => 'libhours_shift',
+      'property_callbacks' => array('libhours_shift_property_info_callback'),
+    ),
+  );  
+}
+
+/**
  * Implements hook_menu().
  */
 function libhours_menu() {

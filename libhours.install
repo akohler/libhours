@@ -7,12 +7,7 @@
 
 /**
  * Implements hook_schema().
- * Creates libhours database tables.
- * Drupal does not implement foreign keys!
- * TODO: Consider using hook_install (and hook_uninstall) to
- * use SQL to add/remove foreign keys at the database level.
- * Discussion: https://www.drupal.org/node/2254131 and
- * https://www.drupal.org/node/911352
+ * Creates libhours base database tables.
  */
 function libhours_schema() {
   // libhours_period table
@@ -79,6 +74,42 @@ function libhours_schema() {
 }
 
 /**
+ * Implements hook_field_schema().
+ * Creates schema for compound libhours_shift field used later.
+ */
+function libhours_field_schema($field) {
+  return array(
+    'columns' => array(
+      'shift_id' => array(
+        'description' => 'Sequential primary key',
+	'type' => 'serial',
+	'unsigned' => TRUE,
+	'not null' => TRUE,
+      ),
+      'day_of_week' => array(
+        'description' => 'Day of week (php 0..6 = Sun..Sat)',
+	'type' => 'int',
+	'unsigned' => TRUE,
+	'not null' => TRUE,
+      ),
+      'open_time' => array(
+        'description' => 'Start of shift: 0000-2359',
+	'type' => 'int',
+	'unsigned' => TRUE,
+	'not null' => TRUE,
+      ),
+      'close_time' => array(
+        'description' => 'End of shift: 0000-2359',
+	'type' => 'int',
+	'unsigned' => TRUE,
+	'not null' => TRUE,
+      ),
+    ), // columns
+    'primary key' => array('shift_id'),
+  );
+}
+
+/**
  * Implements hook_install().
  * Adds fields, associates fields with entities.
  */
@@ -105,6 +136,21 @@ function libhours_install() {
     ),
   );
   field_create_instance($instance);
+
+  // Create libhours_shift field.
+  $field = array(
+    'field_name' => 'libhours_shift',
+  );
+
+  // Attach libhours_shift field to Schedule entity.
+  $instance = array(
+    'field_name' => 'libhours_shift',
+    'entity_type' => 'libhours_schedule',
+    'bundle' => 'schedule_bundle',
+    'required' => TRUE,
+  );
+  field_create_instance($instance);
+
 }
  
 /**
