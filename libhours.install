@@ -31,14 +31,14 @@ function libhours_schema() {
         'length' => 100,
         'not null' => TRUE,
       ),
-      // TODO: Store this as 00:00:00 on start_date
+      // Forced to 00:00:00 on start_date via module code
       'start_date' => array(
         'description' => 'First date of the period',
 	'unsigned' => TRUE,
         'type' => 'int',
         'not null' => TRUE,
       ),
-      // TODO: Store this as 23:59:59 on end_date
+      // Forced to 23:59:59 on end_date via module code
       'end_date' => array(
         'description' => 'Last date of the period',
 	'unsigned' => TRUE,
@@ -51,7 +51,7 @@ function libhours_schema() {
 
   // libhours_schedule table
   $schema['libhours_schedule'] = array(
-    'description' => 'A Schedule allows association of a Period with a set of Shifts',
+    'description' => 'A Schedule allows association of a Period with a set of Shifts, via entity bundle',
     'fields' => array(
       'schedule_id' => array(
         'description' => 'Sequential primary key',
@@ -59,11 +59,11 @@ function libhours_schema() {
 	'unsigned' => TRUE,
 	'not null' => TRUE,
       ),
-      'period_id' => array(
-        'description' => 'ID of the referenced Period',
-	'type' => 'int',
-	'unsigned' => TRUE,
-	'not null' => TRUE,
+      'schedule_name' => array(
+        'description' => 'Descriptive name of the schedule',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
       ),
     ),
     'primary key' => array('schedule_id'),
@@ -71,80 +71,6 @@ function libhours_schema() {
       'schedule_period_fk' => array(
         'table' => 'libhours_period',
 	'columns' => array('period_id' => 'period_id'),
-      ),
-    ),
-  );
-
-  // libhours_location_schedule table
-  $schema['libhours_location_schedule'] = array(
-    'description' => 'A LocationSchedule associates a Schedule with a Location (or Destination)',
-    'fields' => array(
-      'schedule_id' => array(
-        'description' => 'Foreign key to Schedule',
-	'type' => 'int',
-	'unsigned' => TRUE,
-	'not null' => TRUE,
-      ),
-      'node_id' => array(
-        'description' => 'ID of the referenced node (Location, Destination etc.',
-	'type' => 'int',
-	'unsigned' => TRUE,
-	'not null' => TRUE,
-      ),
-    ),
-    'primary key' => array('schedule_id', 'node_id'),
-    'foreign keys' => array(
-      'location_schedule_fk' => array(
-        'table' => 'libhours_schedule',
-	'columns' => array('schedule_id' => 'schedule_id'),
-      ),
-      'location_schedule_node_fk' => array(
-        'table' => 'node',
-	'columns' => array('node_id' => 'nid'),
-      ),
-    ),
-  );
-  
-  // libhours_shift table
-  $schema['libhours_shift'] = array(
-    'description' => 'A Shift contains the daily hours for a Schedule',
-    'fields' => array(
-      'shift_id' => array(
-        'description' => 'Sequential primary key',
-        'type' => 'serial',
-	'unsigned' => TRUE,
-	'not null' => TRUE,
-      ),
-      'schedule_id' => array(
-        'description' => 'Foreign key to Schedule',
-	'type' => 'int',
-	'unsigned' => TRUE,
-	'not null' => TRUE,
-      ),
-      'day_of_week' => array(
-        'description' => 'Day of week (php 0..6 = Sun..Sat)',
-	'type' => 'int',
-	'unsigned' => TRUE,
-	'not null' => TRUE,
-      ),
-      'open_time' => array(
-        'description' => 'Start of shift: 0000-2359',
-	'type' => 'int',
-	'unsigned' => TRUE,
-	'not null' => TRUE,
-      ),
-      'close_time' => array(
-        'description' => 'End of shift: 0000-2359',
-	'type' => 'int',
-	'unsigned' => TRUE,
-	'not null' => TRUE,
-      ),
-    ),
-    'primary key' => array('shift_id'),
-    'foreign keys' => array(
-      'shift_schedule_fk' => array(
-        'table' => 'libhours_schedule',
-	'columns' => array('schedule_id' => 'schedule_id'),
       ),
     ),
   );
@@ -157,8 +83,6 @@ function libhours_schema() {
  * Remove libhours database tables.
  */
 function libhours_uninstall() {
-  db_drop_table('libhours_shift');
-  db_drop_table('libhours_location_schedule');
   db_drop_table('libhours_schedule');
   db_drop_table('libhours_period');
 }

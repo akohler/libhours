@@ -10,8 +10,6 @@ case $1 in
     drush @bs en -y libhours_demo
     drush @bs sqlq "select * from libhours_period"
     drush @bs sqlq "select * from libhours_schedule"
-    drush @bs sqlq "select * from libhours_location_schedule"
-    drush @bs sqlq "select * from libhours_shift"
     ;;
   off)
     drush @bs dis -y libhours_demo libhours

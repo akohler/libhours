@@ -27,29 +27,6 @@ function libhours_entity_info() {
     ),
   );
 
-  $info['libhours_location_schedule'] = array(
-    'label' => t('LocationSchedule'),
-    'fieldable' => FALSE,
-    'entity class' => 'Entity',
-    'controller class' => 'EntityAPIController',
-    'base table' => 'libhours_location_schedule',
-    // TODO: Handle multiple entity keys?  Or create a surrogate primary key?
-    'entity keys' => array(
-      'id' => 'schedule_id',
-    ),
-  );
-
-  $info['libhours_shift'] = array(
-    'label' => t('Shift'),
-    'fieldable' => FALSE,
-    'entity class' => 'Entity',
-    'controller class' => 'EntityAPIController',
-    'base table' => 'libhours_shift',
-    'entity keys' => array(
-      'id' => 'shift_id',
-    ),
-  );
-
   return $info;
 }
 
