@@ -80,12 +80,15 @@ function libhours_schema() {
 function libhours_field_schema($field) {
   return array(
     'columns' => array(
+      // Don't need auto-number field as Drupal gives this an entity-based primary key
+      /*
       'shift_id' => array(
         'description' => 'Sequential primary key',
 	'type' => 'serial',
 	'unsigned' => TRUE,
 	'not null' => TRUE,
       ),
+      */
       'day_of_week' => array(
         'description' => 'Day of week (php 0..6 = Sun..Sat)',
 	'type' => 'int',
@@ -104,8 +107,8 @@ function libhours_field_schema($field) {
 	'unsigned' => TRUE,
 	'not null' => TRUE,
       ),
-    ), // columns
-    'primary key' => array('shift_id'),
+    ),
+    // 'primary key' => array('shift_id'),
   );
 }
 
@@ -140,7 +143,9 @@ function libhours_install() {
   // Create libhours_shift field.
   $field = array(
     'field_name' => 'libhours_shift',
+    'type' => 'libhours_shift',
   );
+  field_create_field($field);
 
   // Attach libhours_shift field to Schedule entity.
   $instance = array(
@@ -158,7 +163,10 @@ function libhours_install() {
  * Remove libhours database tables.
  */
 function libhours_uninstall() {
+//  field_attach_delete_bundle('libhours_schedule', 'schedule_bundle');
   field_delete_field('libhours_period_reference');
+  field_delete_field('libhours_shift');
+  field_purge_batch(100);
   db_drop_table('libhours_schedule');
   db_drop_table('libhours_period');
 }

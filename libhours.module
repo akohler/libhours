@@ -47,7 +47,7 @@ function libhours_field_info() {
       'default_widget' => 'libhours_shift',
       'default_formatter' => 'libhours_shift',
       'property_type' => 'libhours_shift',
-      'property_callbacks' => array('libhours_shift_property_info_callback'),
+      //'property_callbacks' => array('libhours_shift_property_info_callback'),
     ),
   );  
 }
@@ -84,5 +84,9 @@ function _libhours_view_period($id) {
  */
 function _libhours_save_period($period) {
   entity_save('libhours_period', $period);
+}
+
+
+function libhours_shift_property_info_callback() {
 }
 
